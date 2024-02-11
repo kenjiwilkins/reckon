@@ -1,9 +1,9 @@
 export const DEFAULT_PASSWORD_LENGTH = parseInt(
-  process.env.NEXT_PUBLIC_DEFAULT_PASSWORD_LENGTH || "8"
+  process.env.NEXT_PUBLIC_DEFAULT_PASSWORD_LENGTH || '8'
 );
 
 export function validateEmail(email: string): boolean {
-  const atIndex = email.indexOf("@");
+  const atIndex = email.indexOf('@');
   if (atIndex === -1) {
     return false;
   }

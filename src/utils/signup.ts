@@ -1,15 +1,11 @@
-import {
-  AuthenticationDetails,
-  CognitoUserPool,
-  CognitoUser,
-} from "amazon-cognito-identity-js";
+import { AuthenticationDetails, CognitoUserPool, CognitoUser } from 'amazon-cognito-identity-js';
 
-const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || "";
-const userPoolId = process.env.NEXT_PUBLIC_USERPOOL_ID || "";
+const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || '';
+const userPoolId = process.env.NEXT_PUBLIC_USERPOOL_ID || '';
 
 const userPool = new CognitoUserPool({
   UserPoolId: userPoolId,
-  ClientId: clientId,
+  ClientId: clientId
 });
 
 export function getUserPoolName() {
@@ -23,9 +19,9 @@ export function singup(email: string, password: string) {
       password,
       [
         {
-          Name: "email",
-          Value: email,
-        },
+          Name: 'email',
+          Value: email
+        }
       ] as any,
       [],
       (err, result) => {
@@ -43,7 +39,7 @@ export function confirm(email: string, code: string, signin?: boolean) {
   return new Promise((resolve, reject) => {
     const user = new CognitoUser({
       Pool: userPool,
-      Username: email,
+      Username: email
     });
 
     user.confirmRegistration(code, true, (err, result) => {
@@ -60,7 +56,7 @@ export function resendVerification(email: string) {
   return new Promise((resolve, reject) => {
     const user = new CognitoUser({
       Pool: userPool,
-      Username: email,
+      Username: email
     });
     user.resendConfirmationCode((err, result) => {
       if (err) {
@@ -76,11 +72,11 @@ export function authenticate(email: string, password: string) {
   return new Promise((resolve, reject) => {
     const user = new CognitoUser({
       Pool: userPool,
-      Username: email,
+      Username: email
     });
     const authenticationDetails = new AuthenticationDetails({
       Username: email,
-      Password: password,
+      Password: password
     });
     user.authenticateUser(authenticationDetails, {
       onSuccess: (result) => {
@@ -90,7 +86,41 @@ export function authenticate(email: string, password: string) {
       },
       onFailure: (err) => {
         return reject(err);
+      }
+    });
+  });
+}
+
+export function resetPassword(email: string) {
+  return new Promise((resolve, reject) => {
+    const user = new CognitoUser({
+      Pool: userPool,
+      Username: email
+    });
+    user.forgotPassword({
+      onSuccess: (result) => {
+        return resolve(result);
       },
+      onFailure: (err) => {
+        return reject(err);
+      }
+    });
+  });
+}
+
+export function confirmPassword(email: string, code: string, password: string) {
+  return new Promise((resolve, reject) => {
+    const user = new CognitoUser({
+      Pool: userPool,
+      Username: email
+    });
+    user.confirmPassword(code, password, {
+      onSuccess: (result) => {
+        return resolve(result);
+      },
+      onFailure: (err) => {
+        return reject(err);
+      }
     });
   });
 }

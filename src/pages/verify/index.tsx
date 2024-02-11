@@ -1,24 +1,23 @@
-import { FormEvent, createRef, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
-import AppImage from "@/components/appImage";
-import { confirm, resendVerification } from "@/utils/signup";
+import { FormEvent, createRef, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import AppContainer from '@/components/appContainer';
+import AppImage from '@/components/appImage';
+import { confirm, resendVerification } from '@/utils/signup';
 
 function App() {
   const router = useRouter();
   const email = router.query.email as string;
   const DIGITS = 6;
   const [hasError, setHasError] = useState(false);
-  const [errMessage, setErrMessage] = useState("");
+  const [errMessage, setErrMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [everEdited, setEverEdited] = useState(false);
   const [inputRefsArray] = useState(() =>
     Array.from({ length: DIGITS }, () => createRef<HTMLInputElement>())
   );
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [letters, setLetters] = useState(
-    Array.from({ length: DIGITS }, () => "")
-  );
-  const code = useRef("");
+  const [letters, setLetters] = useState(Array.from({ length: DIGITS }, () => ''));
+  const code = useRef('');
   const handleKeyDown = async (value: string) => {
     if (!value) return;
     setCurrentIndex((prevIndex) => {
@@ -41,14 +40,12 @@ function App() {
     setSubmitted(true);
     confirm(email, code.current)
       .then((res) => {
-        window.location.href = encodeURI(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/success`
-        );
+        window.location.href = encodeURI(`${process.env.NEXT_PUBLIC_BASE_URL}/success`);
         router.push({
-          pathname: "/success",
+          pathname: '/success',
           query: {
-            ...router.query,
-          },
+            ...router.query
+          }
         });
       })
       .catch((err) => {
@@ -60,16 +57,13 @@ function App() {
   function resend() {
     resendVerification(email);
     setHasError(true);
-    setErrMessage("Verification email sent");
+    setErrMessage('Verification email sent');
   }
   return (
     <>
-      <div
-        id="container"
-        className="w-screen h-screen flex justify-center items-center"
-      >
-        <div id="form_container" className="flex px-auto w-500px">
-          <div id="form" className="grow shadow-lg w-500px">
+      <AppContainer>
+        <div id="form_container" className="px-auto flex w-500px">
+          <div id="form" className="w-500px grow shadow-lg">
             <AppImage />
             <div id="form_header" className="text-center">
               <h1 className="text-2xl">Verify</h1>
@@ -77,11 +71,11 @@ function App() {
             </div>
             <form>
               <fieldset className="px-16">
-                <div className="flex justify-center gap-2 mt-5">
+                <div className="mt-5 flex justify-center gap-2">
                   {inputRefsArray.map((inputRef, index) => {
                     return (
                       <input
-                        className="border rounded-lg text-center text-3xl border-gray-400 h-16 w-10"
+                        className="h-16 w-10 rounded-lg border border-gray-400 text-center text-3xl"
                         ref={inputRef}
                         type="text"
                         inputMode="numeric"
@@ -96,10 +90,10 @@ function App() {
                           const { value } = e.target;
                           if (value.length <= 0) setEverEdited(true);
                           const nextLetters = letters.map((letter, i) =>
-                            i === index ? value[value.length - 1] || "" : letter
+                            i === index ? value[value.length - 1] || '' : letter
                           );
                           setLetters(nextLetters);
-                          code.current = nextLetters.join("");
+                          code.current = nextLetters.join('');
                           handleKeyDown(value);
                         }}
                       />
@@ -107,44 +101,39 @@ function App() {
                   })}
                 </div>
                 <div className="mt-6 flex flex-col text-center">
-                  <div id="error" className="h-6 mb-2">
+                  <div id="error" className="mb-2 h-6">
                     {hasError && (
-                      <span className="text-red-600">
-                        {errMessage || "Invalid code"}
-                      </span>
+                      <span className="text-red-600">{errMessage || 'Invalid code'}</span>
                     )}
                   </div>
                   <button
                     className={`${
-                      !submitted && letters.join("").length === DIGITS
-                        ? "bg-blue-600"
-                        : "bg-gray-200"
-                    } text-white w-full font-bold h-14 rounded`}
+                      !submitted && letters.join('').length === DIGITS
+                        ? 'bg-blue-600'
+                        : 'bg-gray-200'
+                    } h-14 w-full rounded font-bold text-white`}
                     type="submit"
                     onClick={submit}
-                    disabled={submitted || letters.join("").length !== DIGITS}
+                    disabled={submitted || letters.join('').length !== DIGITS}
                   >
-                    <span>{submitted ? "Verifying..." : "Verify"}</span>
+                    <span>{submitted ? 'Verifying...' : 'Verify'}</span>
                   </button>
                 </div>
               </fieldset>
             </form>
-            <div id="form_footer" className="mx-16 mt-6 mb-12 text-center">
+            <div id="form_footer" className="mx-16 mb-12 mt-6 text-center">
               {email && (
-                <button
-                  className="bg-white text-sm font-light text-blue-400"
-                  onClick={resend}
-                >
+                <button className="bg-white text-sm font-light text-blue-400" onClick={resend}>
                   <span>Resend verification email?</span>
                 </button>
               )}
             </div>
           </div>
         </div>
-        <footer className="absolute bottom-4 h-4 w-full flex justify-start">
+        <footer className="absolute bottom-4 flex h-4 w-full justify-start">
           <span>@2023 by Kenji Wilkins.</span>
         </footer>
-      </div>
+      </AppContainer>
     </>
   );
 }

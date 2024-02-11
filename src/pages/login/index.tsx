@@ -1,143 +1,116 @@
-import { FormEvent, useState } from "react";
-import { useRouter } from "next/router";
-import AppImage from "@/components/appImage";
-import { authenticate } from "@/utils/signup";
-import { validateEmail, validatePasswordOnLogin } from "@/utils/validator";
+import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/router';
+import AppContainer from '@/components/appContainer';
+import AppImage from '@/components/appImage';
+import TextInput from '@/components/textInput';
+import { InputLabel } from '@/components/inputLabel';
+import { Divider } from '@/components/divider';
+import { PrimaryButton } from '@/components/primaryButton';
+import { authenticate } from '@/utils/signup';
+import { validateEmail, validatePasswordOnLogin } from '@/utils/validator';
 
 function App() {
   const router = useRouter();
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   async function login(event: FormEvent) {
     event.preventDefault();
     try {
       await authenticate(email, password);
       const redirectUrl =
-        router.query.redirectUrl ||
-        process.env.NEXT_PUBLIC_DEFAULT_REDIRECT_URL ||
-        "/";
+        router.query.redirectUrl || process.env.NEXT_PUBLIC_DEFAULT_REDIRECT_URL || '/';
       router.push(redirectUrl as string);
     } catch (error) {
-      console.log("error", error);
-      setErrorMessage("Invalid email or password");
+      console.log('error', error);
+      setErrorMessage('Invalid email or password');
     }
   }
 
   return (
     <>
-      <div
-        id="container"
-        className="w-screen h-screen flex justify-center items-center"
-      >
-        <div id="form_container" className="flex px-auto w-500px">
-          <div id="form" className="grow shadow-lg w-500px">
+      <AppContainer>
+        <div id="form_container" className="px-auto flex w-500px">
+          <div id="form" className="w-500px grow shadow-lg">
             <AppImage />
             <form onSubmit={login}>
               <fieldset className="px-16">
-                <label
-                  className={`${
-                    emailFocused
-                      ? "text-blue-600"
-                      : !isEmailValid && email.length
-                      ? "text-red-600"
-                      : "text-gray-400"
-                  } text-sm flex justify-start`}
-                >
+                <InputLabel
+                  variant={
+                    emailFocused ? 'focus' : !isEmailValid && email.length ? 'error' : 'default'
+                  }>
                   Email Address
-                </label>
-                <input
+                </InputLabel>
+                <TextInput
                   type="email"
-                  name="email"
                   placeholder="Email Address"
-                  autoCapitalize="off"
-                  autoCorrect="off"
-                  spellCheck="false"
-                  className="appearance-none w-full h-5 box-border border-none text-base"
+                  value={email}
+                  onChange={(input: string) => {
+                    setEmail(input);
+                    setIsEmailValid(validateEmail(input));
+                  }}
                   onFocus={() => setEmailFocused(true)}
                   onBlur={() => setEmailFocused(false)}
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setIsEmailValid(validateEmail(e.target.value));
-                  }}
                 />
-                <div
-                  className={`${
-                    emailFocused
-                      ? "bg-blue-600"
-                      : !isEmailValid && email.length
-                      ? "bg-red-600"
-                      : "bg-gray-400"
-                  } h-1px my-2`}
-                ></div>
-                <label
-                  className={`${
+                <Divider
+                  variant={
+                    emailFocused ? 'focus' : !isEmailValid && email.length ? 'error' : 'default'
+                  }
+                />
+                <InputLabel
+                  variant={
                     passwordFocused
-                      ? "text-blue-600"
+                      ? 'focus'
                       : !isPasswordValid && password.length
-                      ? "text-red-600"
-                      : "text-gray-400"
-                  } text-sm flex justify-start`}
-                >
+                        ? 'error'
+                        : 'default'
+                  }>
                   Password
-                </label>
-                <input
+                </InputLabel>
+                <TextInput
                   type="password"
-                  name="password"
                   placeholder="Password"
-                  className="appearance-none w-full h-5 box-border border-none text-base"
+                  value={password}
+                  onChange={(input: string) => {
+                    setPassword(input);
+                    setIsPasswordValid(validatePasswordOnLogin(input));
+                  }}
                   onFocus={() => setPasswordFocused(true)}
                   onBlur={() => setPasswordFocused(false)}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setIsPasswordValid(validatePasswordOnLogin(e.target.value));
-                  }}
                 />
-                <div
-                  id="divider"
-                  className={`${
-                    passwordFocused
-                      ? "bg-blue-600"
-                      : password.length
-                      ? "bg-red-600"
-                      : "bg-gray-400"
-                  } h-1px my-2`}
-                ></div>
+                <Divider
+                  variant={passwordFocused ? 'focus' : password.length ? 'error' : 'default'}
+                />
                 <div className="mt-9">
-                  <button
-                    className={`${
-                      isEmailValid ? "bg-blue-600" : "bg-gray-200"
-                    } text-white w-full font-bold h-14 rounded`}
+                  <PrimaryButton
+                    variant={isEmailValid && password.length ? 'primary' : 'secondary'}
                     type="submit"
                     disabled={!email.length || !password.length}
                     onClick={login}
-                    onSubmit={login}
-                  >
+                    onSubmit={login}>
                     <span>Login</span>
-                  </button>
+                  </PrimaryButton>
                 </div>
                 <div className="mt-4 flex justify-center">
                   <span className="text-red-600">{errorMessage}</span>
                 </div>
               </fieldset>
             </form>
-            <div id="form_footer" className="mx-16 mt-6 mb-12 text-center">
+            <div id="form_footer" className="mx-16 mb-12 mt-6 text-center">
               <button className="bg-white text-sm font-light text-blue-400">
-                <span>forgot your email or password?</span>
+                <span>forgot your password?</span>
               </button>
             </div>
           </div>
         </div>
-        <footer className="absolute bottom-4 h-4 w-full flex justify-start">
+        <footer className="absolute bottom-4 flex h-4 w-full justify-start">
           <span>@2023 by Kenji Wilkins.</span>
         </footer>
-      </div>
+      </AppContainer>
     </>
   );
 }
