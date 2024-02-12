@@ -10,4 +10,6 @@ function AppImage() {
   );
 }
 
+export { AppImage };
+
 export default AppImage;

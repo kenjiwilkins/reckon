@@ -1,4 +1,5 @@
-const defaultClasses = 'appearance-none w-full h-5 box-border border-none text-base';
+const defaultClasses =
+  'appearance-none w-full h-5 box-border border-none text-base focus-visible:outline-transparent';
 
 function TextInput({
   type,
@@ -55,4 +56,4 @@ function TextInput({
   );
 }
 
-export default TextInput;
+export { TextInput };

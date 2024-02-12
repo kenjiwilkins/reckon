@@ -1,7 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
-import AppContainer from '@/components/appContainer';
-import AppImage from '@/components/appImage';
+import { AppContainer } from '@/components/appContainer';
 import { singup } from '@/utils/signup';
 import {
   validateEmail,
@@ -43,157 +42,136 @@ function App() {
   return (
     <>
       <AppContainer>
-        <div id="form_container" className="px-auto flex w-500px">
-          <div id="form" className="w-500px grow shadow-lg">
-            <AppImage />
-            <form action="">
-              <fieldset className="px-16">
-                <label
-                  className={`${
-                    emailFocused
-                      ? 'text-blue-600'
-                      : !isEmailValid && email.length
-                        ? 'text-red-600'
-                        : 'text-gray-400'
-                  } flex justify-start text-sm`}
-                >
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email Address"
-                  autoCapitalize="off"
-                  autoCorrect="off"
-                  spellCheck="false"
-                  autoFocus
-                  className="box-border h-5 w-full appearance-none border-none text-base"
-                  onFocus={() => setEmailFocused(true)}
-                  onBlur={() => setEmailFocused(false)}
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setIsEmailValid(validateEmail(e.target.value));
-                  }}
-                />
-                <div
-                  className={`${
-                    emailFocused
-                      ? 'bg-blue-600'
-                      : !isEmailValid && email.length
-                        ? 'bg-red-600'
-                        : 'bg-gray-400'
-                  } my-2 h-1px`}
-                ></div>
-                <label
-                  className={`${
-                    passwordFocused
-                      ? 'text-blue-600'
-                      : !isPasswordValid && password.length
-                        ? 'text-red-600'
-                        : 'text-gray-400'
-                  } flex justify-start text-sm`}
-                >
-                  Password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  className="box-border h-5 w-full appearance-none border-none text-base"
-                  onFocus={() => setPasswordFocused(true)}
-                  onBlur={() => setPasswordFocused(false)}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setIsPasswordValid(validatePasswordOnSignup(e.target.value));
-                  }}
-                />
-                <div
-                  id="divider"
-                  className={`${
-                    passwordFocused
-                      ? 'bg-blue-600'
-                      : !isPasswordValid && password.length
-                        ? 'bg-red-600'
-                        : 'bg-gray-400'
-                  } my-2 h-1px`}
-                ></div>
-                <p className="flex flex-col items-start text-sm">
-                  <span
-                    className={`${
-                      !password.length
-                        ? 'text-gray-400'
-                        : !passwordLongEnough(password)
-                          ? 'text-red-600'
-                          : 'text-blue-600'
-                    }`}
-                  >
-                    Password must be at least 8 characters long{' '}
-                    {passwordLongEnough(password) ? '✓' : '✘'} <br />
-                  </span>
-                  <span
-                    className={`${
-                      !password.length
-                        ? 'text-gray-400'
-                        : !passwordHasMixedCase(password)
-                          ? 'text-red-600'
-                          : 'text-blue-600'
-                    }`}
-                  >
-                    at least one uppercase and lowercase letter{' '}
-                    {passwordHasMixedCase(password) ? '✓' : '✘'}
-                    <br />
-                  </span>
-                  <span
-                    className={`${
-                      !password.length
-                        ? 'text-gray-400'
-                        : !passwordHasNumber(password)
-                          ? 'text-red-600'
-                          : 'text-blue-600'
-                    }`}
-                  >
-                    at least one number {passwordHasNumber(password) ? '✓' : '✘'} <br />
-                  </span>
-                  <span
-                    className={`${
-                      !password.length
-                        ? 'text-gray-400'
-                        : !passwordHasSpecialCharacter(password)
-                          ? 'text-red-600'
-                          : 'text-blue-600'
-                    }`}
-                  >
-                    at least one special character{' '}
-                    {passwordHasSpecialCharacter(password) ? '✓' : '✘'} <br />
-                  </span>
-                </p>
-                <div className="mt-9">
-                  <button
-                    className={`${
-                      isEmailValid && isPasswordValid ? 'bg-blue-600' : 'bg-gray-200'
-                    } h-14 w-full rounded font-bold text-white`}
-                    type="submit"
-                    disabled={!isEmailValid || !isPasswordValid}
-                    onClick={submit}
-                    onSubmit={submit}
-                  >
-                    <span>Sing Up</span>
-                  </button>
-                </div>
-              </fieldset>
-            </form>
-            <div id="form_footer" className="mx-16 mb-12 mt-6">
-              <button className="bg-white text-sm font-light text-blue-400">
-                <span>forgot your email or password?</span>
+        <form action="">
+          <fieldset className="px-16">
+            <label
+              className={`${
+                emailFocused
+                  ? 'text-blue-600'
+                  : !isEmailValid && email.length
+                    ? 'text-red-600'
+                    : 'text-gray-400'
+              } flex justify-start text-sm`}>
+              Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck="false"
+              autoFocus
+              className="box-border h-5 w-full appearance-none border-none text-base"
+              onFocus={() => setEmailFocused(true)}
+              onBlur={() => setEmailFocused(false)}
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setIsEmailValid(validateEmail(e.target.value));
+              }}
+            />
+            <div
+              className={`${
+                emailFocused
+                  ? 'bg-blue-600'
+                  : !isEmailValid && email.length
+                    ? 'bg-red-600'
+                    : 'bg-gray-400'
+              } my-2 h-1px`}></div>
+            <label
+              className={`${
+                passwordFocused
+                  ? 'text-blue-600'
+                  : !isPasswordValid && password.length
+                    ? 'text-red-600'
+                    : 'text-gray-400'
+              } flex justify-start text-sm`}>
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className="box-border h-5 w-full appearance-none border-none text-base"
+              onFocus={() => setPasswordFocused(true)}
+              onBlur={() => setPasswordFocused(false)}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setIsPasswordValid(validatePasswordOnSignup(e.target.value));
+              }}
+            />
+            <div
+              id="divider"
+              className={`${
+                passwordFocused
+                  ? 'bg-blue-600'
+                  : !isPasswordValid && password.length
+                    ? 'bg-red-600'
+                    : 'bg-gray-400'
+              } my-2 h-1px`}></div>
+            <p className="flex flex-col items-start text-sm">
+              <span
+                className={`${
+                  !password.length
+                    ? 'text-gray-400'
+                    : !passwordLongEnough(password)
+                      ? 'text-red-600'
+                      : 'text-blue-600'
+                }`}>
+                Password must be at least 8 characters long{' '}
+                {passwordLongEnough(password) ? '✓' : '✘'} <br />
+              </span>
+              <span
+                className={`${
+                  !password.length
+                    ? 'text-gray-400'
+                    : !passwordHasMixedCase(password)
+                      ? 'text-red-600'
+                      : 'text-blue-600'
+                }`}>
+                at least one uppercase and lowercase letter{' '}
+                {passwordHasMixedCase(password) ? '✓' : '✘'}
+                <br />
+              </span>
+              <span
+                className={`${
+                  !password.length
+                    ? 'text-gray-400'
+                    : !passwordHasNumber(password)
+                      ? 'text-red-600'
+                      : 'text-blue-600'
+                }`}>
+                at least one number {passwordHasNumber(password) ? '✓' : '✘'} <br />
+              </span>
+              <span
+                className={`${
+                  !password.length
+                    ? 'text-gray-400'
+                    : !passwordHasSpecialCharacter(password)
+                      ? 'text-red-600'
+                      : 'text-blue-600'
+                }`}>
+                at least one special character {passwordHasSpecialCharacter(password) ? '✓' : '✘'}{' '}
+                <br />
+              </span>
+            </p>
+            <div className="mt-9">
+              <button
+                className={`${
+                  isEmailValid && isPasswordValid ? 'bg-blue-600' : 'bg-gray-200'
+                } h-14 w-full rounded font-bold text-white`}
+                type="submit"
+                disabled={!isEmailValid || !isPasswordValid}
+                onClick={submit}
+                onSubmit={submit}>
+                <span>Sing Up</span>
               </button>
             </div>
-          </div>
-        </div>
-        <footer className="absolute bottom-4 flex h-4 w-full justify-start">
-          <span>@2023 by Kenji Wilkins.</span>
-        </footer>
+          </fieldset>
+        </form>
+        <div id="form_footer" className="mx-16 mb-12 mt-6"></div>
       </AppContainer>
     </>
   );
