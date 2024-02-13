@@ -1,7 +1,8 @@
+import Head from 'next/head';
 import { FormEvent, createRef, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import AppContainer from '@/components/appContainer';
-import AppImage from '@/components/appImage';
+import { AppContainer } from '@/components/appContainer';
+import { PrimaryButton } from '@/components/primaryButton';
 import { confirm, resendVerification } from '@/utils/signup';
 
 function App() {
@@ -61,78 +62,66 @@ function App() {
   }
   return (
     <>
+      <Head>
+        <title>Verify</title>
+      </Head>
       <AppContainer>
-        <div id="form_container" className="px-auto flex w-500px">
-          <div id="form" className="w-500px grow shadow-lg">
-            <AppImage />
-            <div id="form_header" className="text-center">
-              <h1 className="text-2xl">Verify</h1>
-              <h2>Please fill in 6 digits code</h2>
-            </div>
-            <form>
-              <fieldset className="px-16">
-                <div className="mt-5 flex justify-center gap-2">
-                  {inputRefsArray.map((inputRef, index) => {
-                    return (
-                      <input
-                        className="h-16 w-10 rounded-lg border border-gray-400 text-center text-3xl"
-                        ref={inputRef}
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={1}
-                        autoFocus={!letters[0].length && !index}
-                        key={index}
-                        value={letters[index]}
-                        onClick={() => {
-                          setCurrentIndex(index);
-                        }}
-                        onChange={(e) => {
-                          const { value } = e.target;
-                          if (value.length <= 0) setEverEdited(true);
-                          const nextLetters = letters.map((letter, i) =>
-                            i === index ? value[value.length - 1] || '' : letter
-                          );
-                          setLetters(nextLetters);
-                          code.current = nextLetters.join('');
-                          handleKeyDown(value);
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-                <div className="mt-6 flex flex-col text-center">
-                  <div id="error" className="mb-2 h-6">
-                    {hasError && (
-                      <span className="text-red-600">{errMessage || 'Invalid code'}</span>
-                    )}
-                  </div>
-                  <button
-                    className={`${
-                      !submitted && letters.join('').length === DIGITS
-                        ? 'bg-blue-600'
-                        : 'bg-gray-200'
-                    } h-14 w-full rounded font-bold text-white`}
-                    type="submit"
-                    onClick={submit}
-                    disabled={submitted || letters.join('').length !== DIGITS}
-                  >
-                    <span>{submitted ? 'Verifying...' : 'Verify'}</span>
-                  </button>
-                </div>
-              </fieldset>
-            </form>
-            <div id="form_footer" className="mx-16 mb-12 mt-6 text-center">
-              {email && (
-                <button className="bg-white text-sm font-light text-blue-400" onClick={resend}>
-                  <span>Resend verification email?</span>
-                </button>
-              )}
-            </div>
-          </div>
+        <div id="form_header" className="text-center">
+          <h1 className="text-2xl">Verify</h1>
+          <h2>Please fill in 6 digits code</h2>
         </div>
-        <footer className="absolute bottom-4 flex h-4 w-full justify-start">
-          <span>@2023 by Kenji Wilkins.</span>
-        </footer>
+        <form>
+          <fieldset className="px-16">
+            <div className="mt-5 flex justify-center gap-2">
+              {inputRefsArray.map((inputRef, index) => {
+                return (
+                  <input
+                    className="h-16 w-10 rounded-lg border border-gray-400 text-center text-3xl"
+                    ref={inputRef}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    autoFocus={!letters[0].length && !index}
+                    key={index}
+                    value={letters[index]}
+                    onClick={() => {
+                      setCurrentIndex(index);
+                    }}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      if (value.length <= 0) setEverEdited(true);
+                      const nextLetters = letters.map((letter, i) =>
+                        i === index ? value[value.length - 1] || '' : letter
+                      );
+                      setLetters(nextLetters);
+                      code.current = nextLetters.join('');
+                      handleKeyDown(value);
+                    }}
+                  />
+                );
+              })}
+            </div>
+            <div className="mt-6 flex flex-col text-center">
+              <div id="error" className="mb-2 h-6">
+                {hasError && <span className="text-red-600">{errMessage || 'Invalid code'}</span>}
+              </div>
+              <PrimaryButton
+                variant={!submitted && letters.join('').length === DIGITS ? 'primary' : 'secondary'}
+                type="submit"
+                onClick={submit}
+                disabled={submitted || letters.join('').length !== DIGITS}>
+                <span>{submitted ? 'Verifying...' : 'Verify'}</span>
+              </PrimaryButton>
+            </div>
+          </fieldset>
+        </form>
+        <div id="form_footer" className="mx-16 mb-12 mt-6 text-center">
+          {email && (
+            <button className="bg-white text-sm font-light text-blue-400" onClick={resend}>
+              <span>Resend verification email?</span>
+            </button>
+          )}
+        </div>
       </AppContainer>
     </>
   );

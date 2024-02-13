@@ -1,59 +1,21 @@
-const defaultClasses =
-  'appearance-none w-full h-5 box-border border-none text-base focus-visible:outline-transparent';
+import React from 'react';
+import clsx from 'clsx';
+import { cva } from 'class-variance-authority';
+import type { VariantProps } from 'class-variance-authority';
 
-function TextInput({
-  type,
-  value,
-  onChange,
-  classNames = defaultClasses,
-  placeholder = '',
-  autoCapitalize = 'off',
-  autoCorrect = 'off',
-  spellCheck = false,
-  onFocus,
-  onBlur
-}: {
-  type: string;
-  value: string;
-  onChange: Function;
-  classNames?: string;
-  placeholder?: string;
-  autoCapitalize?: string;
-  autoCorrect?: string;
-  spellCheck?: boolean;
-  onFocus?: Function;
-  onBlur?: Function;
-}) {
-  return (
-    <>
-      {type === 'password' ? (
-        <input
-          type="password"
-          name="password"
-          className={classNames}
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={() => onFocus && onFocus()}
-          onBlur={() => onBlur && onBlur()}
-        />
-      ) : (
-        <input
-          type="email"
-          name="email"
-          className={classNames}
-          placeholder={placeholder}
-          autoCapitalize={autoCapitalize}
-          autoCorrect={autoCorrect}
-          spellCheck={spellCheck}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={() => onFocus && onFocus()}
-          onBlur={() => onBlur && onBlur()}
-        />
-      )}
-    </>
-  );
-}
+const textInputClasses = cva([
+  'appearance-none',
+  'w-full',
+  'h-5',
+  'box-border',
+  'border-none',
+  'text-base',
+  'focus-visible:outline-transparent'
+]);
 
-export { TextInput };
+export type TextInputProps = React.ComponentProps<'input'> & VariantProps<typeof textInputClasses>;
+
+export const TextInput: React.FC<TextInputProps> = ({ className, ...props }) => {
+  const classes = clsx(textInputClasses(), className);
+  return <input className={classes} {...props} />;
+};

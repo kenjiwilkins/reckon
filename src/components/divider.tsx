@@ -16,9 +16,9 @@ const dividerClasses = cva(['my-2', 'h-1px'], {
   }
 });
 
-export type DividerProps = React.ComponentPropsWithRef<'div'> & VariantProps<typeof dividerClasses>;
+export type DividerProps = React.ComponentProps<'div'> & VariantProps<typeof dividerClasses>;
 
-export const Divider: React.FC<DividerProps> = React.forwardRef(({ className, ...props }) => {
+export const Divider: React.FC<DividerProps> = ({ className, ...props }) => {
   const classes = clsx(dividerClasses(props), className);
   return <div className={classes} />;
-});
+};

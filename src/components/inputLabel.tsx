@@ -13,29 +13,14 @@ const inputLabelClasses = cva(['text-sm', 'flex', 'justify-start'], {
   }
 });
 
-export type InputLabelProps = React.ComponentPropsWithRef<'label'> &
+export type InputLabelProps = React.ComponentProps<'label'> &
   VariantProps<typeof inputLabelClasses> & { children?: React.ReactNode };
 
-export const InputLabel: React.FC<InputLabelProps> = React.forwardRef(
-  ({ className, children, ...props }) => {
-    const classes = clsx(inputLabelClasses(props), className);
-    return (
-      <label className={classes} {...props}>
-        {children}
-      </label>
-    );
-  }
-);
-
-// function InputLabel({
-//   children,
-//   className = ''
-// }: {
-//   children: React.ReactNode;
-//   className?: string;
-// }) {
-//   const defaultClasses = 'text-sm flex justify-start';
-//   return <label className={`${defaultClasses} ${className}`}>{children}</label>;
-// }
-
-// export default InputLabel;
+export const InputLabel: React.FC<InputLabelProps> = ({ className, children, ...props }) => {
+  const classes = clsx(inputLabelClasses(props), className);
+  return (
+    <label className={classes} {...props}>
+      {children}
+    </label>
+  );
+};

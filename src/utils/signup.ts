@@ -91,7 +91,7 @@ export function authenticate(email: string, password: string) {
   });
 }
 
-export function resetPassword(email: string) {
+export function forgotPassword(email: string) {
   return new Promise((resolve, reject) => {
     const user = new CognitoUser({
       Pool: userPool,

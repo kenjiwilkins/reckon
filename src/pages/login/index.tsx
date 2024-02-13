@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { AppContainer } from '@/components/appContainer';
@@ -10,10 +11,10 @@ import { validateEmail, validatePasswordOnLogin } from '@/utils/validator';
 
 function App() {
   const router = useRouter();
-  const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
   const [password, setPassword] = useState('');
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -23,7 +24,12 @@ function App() {
       await authenticate(email, password);
       const redirectUrl =
         router.query.redirectUrl || process.env.NEXT_PUBLIC_DEFAULT_REDIRECT_URL || '/';
-      router.push(redirectUrl as string);
+      router.push({
+        pathname: redirectUrl as string,
+        query: {
+          ...router.query
+        }
+      });
     } catch (error) {
       console.log('error', error);
       setErrorMessage('Invalid email or password');
@@ -32,6 +38,9 @@ function App() {
 
   return (
     <>
+      <Head>
+        <title>Login</title>
+      </Head>
       <AppContainer>
         <form onSubmit={login}>
           <fieldset className="px-16">
@@ -45,12 +54,12 @@ function App() {
               type="email"
               placeholder="Email Address"
               value={email}
-              onChange={(input: string) => {
-                setEmail(input);
-                setIsEmailValid(validateEmail(input));
-              }}
               onFocus={() => setEmailFocused(true)}
               onBlur={() => setEmailFocused(false)}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setIsEmailValid(validateEmail(event.target.value));
+              }}
             />
             <Divider
               variant={emailFocused ? 'focus' : !isEmailValid && email.length ? 'error' : 'default'}
@@ -69,9 +78,9 @@ function App() {
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(input: string) => {
-                setPassword(input);
-                setIsPasswordValid(validatePasswordOnLogin(input));
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setIsPasswordValid(validatePasswordOnLogin(event.target.value));
               }}
               onFocus={() => setPasswordFocused(true)}
               onBlur={() => setPasswordFocused(false)}

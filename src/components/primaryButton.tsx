@@ -12,16 +12,14 @@ const primaryButtonClasses = cva(['h-14', 'w-full', 'rounded', 'font-bold', 'tex
   }
 });
 
-export type PrimaryButtonProps = React.ComponentPropsWithRef<'button'> &
+export type PrimaryButtonProps = React.ComponentProps<'button'> &
   VariantProps<typeof primaryButtonClasses> & { children?: React.ReactNode };
 
-export const PrimaryButton: React.FC<PrimaryButtonProps> = React.forwardRef(
-  ({ className, children, ...props }) => {
-    const classes = clsx(primaryButtonClasses(props), className);
-    return (
-      <button className={classes} {...props}>
-        {children}
-      </button>
-    );
-  }
-);
+export const PrimaryButton: React.FC<PrimaryButtonProps> = ({ className, children, ...props }) => {
+  const classes = clsx(primaryButtonClasses(props), className);
+  return (
+    <button className={classes} {...props}>
+      {children}
+    </button>
+  );
+};

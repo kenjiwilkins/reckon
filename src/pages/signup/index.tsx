@@ -1,6 +1,12 @@
+import Head from 'next/head';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { AppContainer } from '@/components/appContainer';
+import { InputLabel } from '@/components/inputLabel';
+import { TextInput } from '@/components/textInput';
+import { Divider } from '@/components/divider';
+import { PrimaryButton } from '@/components/primaryButton';
+import { Typography } from '@/components/typography';
 import { singup } from '@/utils/signup';
 import {
   validateEmail,
@@ -41,133 +47,114 @@ function App() {
 
   return (
     <>
+      <Head>
+        <title>Sign Up</title>
+      </Head>
       <AppContainer>
         <form action="">
           <fieldset className="px-16">
-            <label
-              className={`${
-                emailFocused
-                  ? 'text-blue-600'
-                  : !isEmailValid && email.length
-                    ? 'text-red-600'
-                    : 'text-gray-400'
-              } flex justify-start text-sm`}>
+            <InputLabel
+              variant={
+                emailFocused ? 'focus' : !isEmailValid && email.length ? 'error' : 'default'
+              }>
               Email Address
-            </label>
-            <input
-              type="email"
+            </InputLabel>
+            <TextInput
               name="email"
+              type="email"
               placeholder="Email Address"
               autoCapitalize="off"
               autoCorrect="off"
               spellCheck="false"
               autoFocus
-              className="box-border h-5 w-full appearance-none border-none text-base"
+              value={email}
               onFocus={() => setEmailFocused(true)}
               onBlur={() => setEmailFocused(false)}
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setIsEmailValid(validateEmail(e.target.value));
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setIsEmailValid(validateEmail(event.target.value));
               }}
             />
-            <div
-              className={`${
-                emailFocused
-                  ? 'bg-blue-600'
-                  : !isEmailValid && email.length
-                    ? 'bg-red-600'
-                    : 'bg-gray-400'
-              } my-2 h-1px`}></div>
-            <label
-              className={`${
+            <Divider
+              variant={emailFocused ? 'focus' : !isEmailValid && email.length ? 'error' : 'default'}
+            />
+            <InputLabel
+              variant={
                 passwordFocused
-                  ? 'text-blue-600'
+                  ? 'focus'
                   : !isPasswordValid && password.length
-                    ? 'text-red-600'
-                    : 'text-gray-400'
-              } flex justify-start text-sm`}>
+                    ? 'error'
+                    : 'default'
+              }>
               Password
-            </label>
-            <input
+            </InputLabel>
+            <TextInput
               type="password"
               name="password"
               placeholder="Password"
-              className="box-border h-5 w-full appearance-none border-none text-base"
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setIsPasswordValid(validatePasswordOnSignup(event.target.value));
+              }}
               onFocus={() => setPasswordFocused(true)}
               onBlur={() => setPasswordFocused(false)}
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setIsPasswordValid(validatePasswordOnSignup(e.target.value));
-              }}
             />
-            <div
-              id="divider"
-              className={`${
+            <Divider
+              variant={
                 passwordFocused
-                  ? 'bg-blue-600'
+                  ? 'focus'
                   : !isPasswordValid && password.length
-                    ? 'bg-red-600'
-                    : 'bg-gray-400'
-              } my-2 h-1px`}></div>
-            <p className="flex flex-col items-start text-sm">
-              <span
-                className={`${
-                  !password.length
-                    ? 'text-gray-400'
-                    : !passwordLongEnough(password)
-                      ? 'text-red-600'
-                      : 'text-blue-600'
-                }`}>
-                Password must be at least 8 characters long{' '}
-                {passwordLongEnough(password) ? '✓' : '✘'} <br />
-              </span>
-              <span
-                className={`${
-                  !password.length
-                    ? 'text-gray-400'
-                    : !passwordHasMixedCase(password)
-                      ? 'text-red-600'
-                      : 'text-blue-600'
-                }`}>
-                at least one uppercase and lowercase letter{' '}
-                {passwordHasMixedCase(password) ? '✓' : '✘'}
-                <br />
-              </span>
-              <span
-                className={`${
-                  !password.length
-                    ? 'text-gray-400'
-                    : !passwordHasNumber(password)
-                      ? 'text-red-600'
-                      : 'text-blue-600'
-                }`}>
-                at least one number {passwordHasNumber(password) ? '✓' : '✘'} <br />
-              </span>
-              <span
-                className={`${
-                  !password.length
-                    ? 'text-gray-400'
-                    : !passwordHasSpecialCharacter(password)
-                      ? 'text-red-600'
-                      : 'text-blue-600'
-                }`}>
-                at least one special character {passwordHasSpecialCharacter(password) ? '✓' : '✘'}{' '}
-                <br />
-              </span>
-            </p>
+                    ? 'error'
+                    : 'default'
+              }
+            />
+            <Typography
+              variant="caption"
+              color={
+                !password.length ? 'secondary' : !passwordLongEnough(password) ? 'error' : 'primary'
+              }>
+              Password must be at least 8 characters long {passwordLongEnough(password) ? '✓' : '✘'}
+            </Typography>
+            <Typography
+              variant="caption"
+              color={
+                !password.length
+                  ? 'secondary'
+                  : !passwordHasMixedCase(password)
+                    ? 'error'
+                    : 'primary'
+              }>
+              at least one uppercase and lowercase letter{' '}
+              {passwordHasMixedCase(password) ? '✓' : '✘'}
+            </Typography>
+            <Typography
+              variant="caption"
+              color={
+                !password.length ? 'secondary' : !passwordHasNumber(password) ? 'error' : 'primary'
+              }>
+              at least one number {passwordHasNumber(password) ? '✓' : '✘'}
+            </Typography>
+            <Typography
+              variant="caption"
+              color={
+                !password.length
+                  ? 'secondary'
+                  : !passwordHasSpecialCharacter(password)
+                    ? 'error'
+                    : 'primary'
+              }>
+              at least one special character {passwordHasSpecialCharacter(password) ? '✓' : '✘'}
+            </Typography>
             <div className="mt-9">
-              <button
-                className={`${
-                  isEmailValid && isPasswordValid ? 'bg-blue-600' : 'bg-gray-200'
-                } h-14 w-full rounded font-bold text-white`}
+              <PrimaryButton
+                variant={isEmailValid && isPasswordValid ? 'primary' : 'secondary'}
                 type="submit"
                 disabled={!isEmailValid || !isPasswordValid}
                 onClick={submit}
                 onSubmit={submit}>
                 <span>Sing Up</span>
-              </button>
+              </PrimaryButton>
             </div>
           </fieldset>
         </form>

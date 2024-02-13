@@ -1,5 +1,6 @@
-import AppContainer from '@/components/appContainer';
-import AppImage from '@/components/appImage';
+import Head from 'next/head';
+import { AppContainer } from '@/components/appContainer';
+import { AppImage } from '@/components/appImage';
 import { useRouter } from 'next/router';
 
 function App() {
@@ -14,6 +15,9 @@ function App() {
   }
   return (
     <>
+      <Head>
+        <title>Success</title>
+      </Head>
       <AppContainer>
         <div id="form_container" className="px-auto flex w-500px">
           <div id="form" className="w-500px grow shadow-lg">
@@ -24,8 +28,7 @@ function App() {
                 height="200px"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-              >
+                fill="none">
                 <g id="SVGRepo_bgCarrier" strokeWidth="0" />
 
                 <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
@@ -47,8 +50,7 @@ function App() {
             <div className="mt-4 flex justify-center px-16">
               <button
                 className="h-14 w-full rounded bg-blue-600 font-bold text-white"
-                onClick={login}
-              >
+                onClick={login}>
                 Login
               </button>
             </div>
